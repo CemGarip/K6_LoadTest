@@ -1,0 +1,27 @@
+name: Daily K6 Load Test
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Her gün sabah 09:00 (UTC+3)
+  workflow_dispatch:      # Elle başlatma
+
+jobs:
+  run-k6-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install k6
+        run: |
+          curl -s https://dl.k6.io/key.gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/k6.gpg
+          echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt update
+          sudo apt install k6
+
+      - name: Login to K6 Cloud
+        run: echo "${{ secrets.K6_CLOUD_TOKEN }}" | k6 login cloud --token -
+
+      - name: Run K6 test
+        run: k6 cloud getir-dashboard-ramping.js
