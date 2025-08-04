@@ -21,7 +21,7 @@ jobs:
           sudo apt install k6
 
       - name: Login to K6 Cloud
-        run: echo "${{ secrets.K6_CLOUD_TOKEN }}" | k6 login cloud --token -
+        run: k6 login cloud --token "${{ secrets.K6_CLOUD_TOKEN }}"
 
       - name: Run K6 test
         run: k6 cloud getir-dashboard-ramping.js
