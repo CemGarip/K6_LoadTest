@@ -25,12 +25,3 @@ jobs:
 
       - name: Run K6 test
         run: k6 cloud getir-dashboard-ramping.js
-
-      - name: Run K6 test and save JSON
-        run: k6 run --out json=output.json getir-dashboard-ramping.js
-
-      - name: Upload JSON result
-        uses: actions/upload-artifact@v3
-        with:
-          name: k6-results
-          path: output.json
