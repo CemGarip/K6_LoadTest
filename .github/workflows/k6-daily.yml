@@ -3,7 +3,7 @@ name: Daily K6 Load Test
 on:
   schedule:
     - cron: '0 6 * * *'  # Her gün sabah 09:00 (UTC+3)
-  workflow_dispatch:      # Elle başlatma
+  workflow_dispatch:
 
 jobs:
   run-k6-test:
@@ -23,5 +23,27 @@ jobs:
       - name: Login to K6 Cloud
         run: k6 login cloud --token "${{ secrets.K6_CLOUD_TOKEN }}"
 
-      - name: Run K6 test
+      - name: Run K6 test in cloud
         run: k6 cloud getir-dashboard-ramping.js
+
+      - name: Send success email
+        if: success()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "✅ Daily K6 Load Test Passed"
+          to: ${{ secrets.EMAIL_RECEIVER }}
+          from: GitHub Actions <${{ secrets.EMAIL_USERNAME }}>
+          body: |
+            Merhaba 👋
+
+            Günlük K6 yük testi başarıyla tamamlandı.
+
+            📊 Test Raporu (Grafana):  
+            https://ibrahimcemgarip.grafana.net/a/k6-app/runs
+
+            Selamlar,
+            GitHub Actions
