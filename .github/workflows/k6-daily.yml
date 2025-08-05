@@ -43,7 +43,8 @@ jobs:
             Günlük K6 yük testi başarıyla tamamlandı.
 
             📊 Test Raporu (Grafana):  
-            https://ibrahimcemgarip.grafana.net/a/k6-app/runs
+            https://ibrahimcemgarip.grafana.net/a/k6-app/runs?sort=desc
+
 
             Selamlar,
             GitHub Actions
